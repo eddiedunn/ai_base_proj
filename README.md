@@ -1,142 +1,149 @@
-# Task Master with Memory Bank & Rules System
-### by [@eyaltoledano](https://x.com/eyaltoledano) (Task Master core)
+# Task Master with Integrated Memory Bank & Rules System
+### Task Master Core by [@eyaltoledano](https://x.com/eyaltoledano)
 
-A task management system for AI-driven development using Claude Task Master, enhanced with a structured Memory Bank and Cursor Rules system for improved AI context and workflow management, designed to work seamlessly with Cursor AI.
+This project combines the **Task Master CLI**, a powerful tool for AI-driven task management, with a custom **Memory Bank & Cursor Rules system**. This integrated approach provides the AI assistant (like Cursor) with both structured tasks and the essential context, state, and guidelines needed for effective development across sessions.
 
-**IMPORTANT:** This project combines the standard Task Master CLI with a custom documentation system (Memory Bank & Rules). Setting it up correctly requires following the specific two-step process outlined below.
+**Key Concept:** The system relies on the `task-master` CLI to manage tasks defined in `tasks/tasks.json`, while the `memory-bank/` and `.cursor/rules/` directories provide the necessary operational context and instructions for the AI. Correct setup and continuous synchronization between these parts are crucial.
 
 ## Requirements
 
 - Node.js 14.0.0 or higher
 - Anthropic API key (`ANTHROPIC_API_KEY` in `.env`)
-- (Optional) Perplexity API key (`PERPLEXITY_API_KEY` in `.env`) for enhanced features
+- (Optional) Perplexity API key (`PERPLEXITY_API_KEY` in `.env`) for research-enhanced features
 - Task Master AI package (global or local installation)
 
-## Setup & Initialization (Two-Step Process - Read Carefully!)
+## Setup & Initialization: A Crucial Two-Step Process
 
-This project requires setting up both the Task Master core and the supporting Memory Bank/Rules structure.
+Getting started requires setting up **both** the Task Master tool and the supporting documentation framework. Please follow these steps carefully:
 
-**Step 1: Initialize Task Master Core**
+**Step 1: Initialize Core Task Master Components**
 
-1.  Install the Task Master package:
+This step sets up the task management engine.
+
+1.  **Install Task Master:**
     ```bash
-    # Install globally (recommended for easy CLI access)
+    # Globally (recommended for CLI ease):
     npm install -g task-master-ai
 
-    # OR install locally within your project
+    # Or Locally (ensure package.json has "type": "module"):
     # npm install task-master-ai
-    # Ensure your package.json has "type": "module"
     ```
-2.  Run the Task Master initialization from your project's root directory (`shit_test`):
+2.  **Run Task Master Init:** Execute this command from your project root (`shit_test`):
     ```bash
-    # If installed globally
+    # If installed globally:
     task-master init
 
-    # If installed locally
+    # If installed locally:
     # npx task-master init
     ```
-    Follow the prompts. This will set up the basic `tasks/tasks.json`, the `tasks/` directory, and potentially other core Task Master files.
-3.  Create a `.env` file in the project root (`shit_test`).
-4.  Add your `ANTHROPIC_API_KEY` to the `.env` file. You can also add other optional configuration variables here (see Configuration section below).
-    Example `.env` entry:
-    ```
+    Follow any prompts. This typically creates the `tasks/` directory and the base `tasks/tasks.json` file.
+3.  **Configure API Keys:** Create a `.env` file in the project root. Add your `ANTHROPIC_API_KEY`. Add `PERPLEXITY_API_KEY` if you plan to use the research features.
+    ```dotenv
+    # Example .env content
     ANTHROPIC_API_KEY=sk-ant-api03-...
+    PERPLEXITY_API_KEY=pplx-... # Optional
     ```
+    *(See the Configuration section below for more `.env` options)*
 
-**Step 2: Set Up Memory Bank & Cursor Rules (Required for AI Operation)**
+**Step 2: Establish the AI's Context Framework (Memory Bank & Rules)**
 
-The `task-master init` command **DOES NOT** create the necessary documentation structure for the AI. You **MUST** create this structure **manually or by instructing your AI assistant** *after* completing Step 1. This structure is essential for the AI to maintain context and follow project guidelines.
+This step provides the AI with its essential "memory" and operating instructions. **The `task-master init` command does NOT perform this step.** It must be done manually or by instructing your AI assistant immediately after Step 1.
 
-1.  **Create Directories** (if they don't exist after Step 1):
+1.  **Create Required Directories:** Ensure these directories exist in your project root:
     ```bash
-    # Run these from your project root (shit_test)
     mkdir memory-bank
     mkdir -p .cursor/rules
     ```
-2.  **Create and Populate Files:** Create the following files. Your AI assistant can help generate the initial placeholder content based on the project's defined structure. If working manually, create the files and add basic placeholder content initially. (The detailed content for these files should have been provided separately or exists within the project if cloned).
-    *   `memory-bank/projectbrief.md`
-    *   `memory-bank/productContext.md`
-    *   `memory-bank/systemPatterns.md`
-    *   `memory-bank/techContext.md`
-    *   `memory-bank/activeContext.md` (Crucial for state tracking)
-    *   `memory-bank/progress.md` (Crucial for state tracking)
-    *   `.cursor/rules/_meta_instructions.mdc` (**Mandatory reading for the AI**)
-    *   `.cursor/rules/cursor_rules.mdc` (Rules for writing rules)
-    *   `.cursor/rules/self_improve.mdc` (Process for updating rules)
-    *   `.cursor/rules/dev_workflow.mdc` (Detailed Task Master commands/workflow)
-    *   `.cursor/learned_preferences.md` (For dynamic AI learning)
+2.  **Create and Populate Core Files:** Create the following files within the specified directories. Initial placeholder content should be added (refer to previous setup documentation or instruct your AI to generate based on the defined structure). These files form the AI's knowledge base.
 
-**Setup Completion:** Once both steps are done, the project is ready. The AI *must* be instructed to read and follow the process defined in `.cursor/rules/_meta_instructions.mdc` for all operations.
+    *   **Memory Bank Files (in `memory-bank/`)**:
+        *   `projectbrief.md`: High-level goals and scope.
+        *   `productContext.md`: The "why" - problem, users, value.
+        *   `systemPatterns.md`: Architecture, key technical decisions.
+        *   `techContext.md`: Tech stack, setup details, constraints.
+        *   `activeContext.md`: **Crucial:** Current focus, recent changes, next steps. (Needs frequent updates!)
+        *   `progress.md`: **Crucial:** Overall status, what's done/left, issues. (Needs frequent updates!)
 
-## Configuration (`.env` file)
+    *   **Cursor Rules & Learning Files (in `.cursor/` and `.cursor/rules/`)**:
+        *   `.cursor/rules/_meta_instructions.mdc`: **Essential:** Defines how the AI uses this entire system. Must be read first by AI.
+        *   `.cursor/rules/cursor_rules.mdc`: Guidelines for creating/maintaining rules in `.cursor/rules/`.
+        *   `.cursor/rules/self_improve.mdc`: Process for evolving rules.
+        *   `.cursor/rules/dev_workflow.mdc`: **Essential:** Detailed reference for the `task-master` CLI commands and their integration into the workflow.
+        *   `.cursor/learned_preferences.md`: Captures dynamic learnings, user preferences, project nuances.
 
-Configuration is managed via a `.env` file in the project root.
+**Setup Complete:** Once both Step 1 and Step 2 are finished, the full system is ready. The AI assistant *must* operate according to the instructions defined in `.cursor/rules/_meta_instructions.mdc`.
 
--   **`ANTHROPIC_API_KEY`**: (Required) Your Anthropic API key.
--   **`PERPLEXITY_API_KEY`**: (Optional) Your Perplexity API key for research features.
--   **`MODEL`**: Claude model (default: "claude-3-7-sonnet-20250219").
--   **`MAX_TOKENS`**: Max tokens for AI responses (default: 4000).
--   **`TEMPERATURE`**: AI response temperature (default: 0.7).
--   **`PERPLEXITY_MODEL`**: Perplexity model (default: "sonar-medium-online").
--   **`DEBUG`**: Enable debug logging (default: false).
--   **`LOG_LEVEL`**: Log level (default: info).
--   **`DEFAULT_SUBTASKS`**: Default subtask count for `expand` (default: 3).
--   **`DEFAULT_PRIORITY`**: Default task priority (default: medium).
--   **`PROJECT_NAME`**: Override project name in `tasks.json`.
--   **`PROJECT_VERSION`**: Override version in `tasks.json`.
+## Configuration (`.env` Options)
 
-## How the Combined System Works
+Control Task Master behavior via environment variables in your `.env` file:
 
-This project uses a layered approach for AI context and task management, defined in `.cursor/rules/_meta_instructions.mdc`:
+-   `ANTHROPIC_API_KEY`: **(Required)** Anthropic key.
+-   `PERPLEXITY_API_KEY`: (Optional) Perplexity key.
+-   `MODEL`: Claude model (default: `"claude-3-7-sonnet-20250219"`).
+-   `MAX_TOKENS`: Response length limit (default: `4000`).
+-   `TEMPERATURE`: Response creativity (default: `0.7`).
+-   `PERPLEXITY_MODEL`: Perplexity model (default: `"sonar-medium-online"`).
+-   `DEBUG`: Enable verbose logging (default: `false`).
+-   `LOG_LEVEL`: Logging detail (`info`, `debug`, `warn`, `error`, default: `info`).
+-   `DEFAULT_SUBTASKS`: Default subtask count for `expand` (default: `3`).
+-   `DEFAULT_PRIORITY`: Default new task priority (default: `medium`).
+-   `PROJECT_NAME`: Project name metadata in `tasks.json`.
+-   `PROJECT_VERSION`: Project version metadata in `tasks.json`.
 
-1.  **Layer 1: Memory Bank (`memory-bank/`)**: Foundational project context (Why, What, How-HighLevel, Current State). Read fully by the AI at the start of every session. **Must be kept up-to-date MANUALLY or by AI instruction** after relevant changes.
-2.  **Layer 2: Actionable Rules (`.cursor/rules/`)**: Specific coding standards, workflow definitions (`dev_workflow.mdc` detailing Task Master usage), and meta-rules. Consulted as needed.
-3.  **Layer 3: Dynamic Learning (`.cursor/learned_preferences.md`)**: Captures user preferences and nuances learned during interaction.
+## How the Integrated System Operates
 
-**CRITICAL:** Task state changes made via the `task-master` CLI (e.g., setting status to 'done') **MUST** be reflected by updating the Memory Bank files (especially `activeContext.md` and `progress.md`). This synchronization is currently **manual or requires explicit AI instruction** – it is not automatic.
+This project uses a layered system (defined in `.cursor/rules/_meta_instructions.mdc`) to provide the AI with comprehensive context and guidance:
 
-## Development Workflow (AI-Driven)
+1.  **Layer 1: Memory Bank (`memory-bank/`)**: Provides foundational project context, rationale, technical overview, and crucially, the **current state** (`activeContext.md`, `progress.md`). The AI **must** read all files in this layer at the start of every session to regain context.
+2.  **Layer 2: Actionable Rules (`.cursor/rules/`)**: Contains specific, often context-dependent rules (`globs`), coding standards, and the essential `dev_workflow.mdc` which details how to use the `task-master` CLI.
+3.  **Layer 3: Dynamic Learning (`.cursor/learned_preferences.md`)**: A place to record specific user preferences or project nuances discovered during interactions that aren't yet formal rules.
 
-The typical workflow involves using the `task-master` CLI (often executed by the AI assistant) and ensuring the Memory Bank stays synchronized:
+**Critical Synchronization Requirement:**
 
-1.  **Initialize Tasks:** Start with `task-master parse-prd <prd_file>` and `task-master generate`. **Update Memory Bank** (progress, active context).
-2.  **Find Next Task:** Use `task-master list` and `task-master next`. Update `activeContext.md` with the chosen task.
-3.  **Understand Task:** Use `task-master show <id>`. Consult Memory Bank and relevant rules.
-4.  **Implement:** Code the task.
-5.  **Complete Task:** Use `task-master set-status --id=<id> --status=done`. **IMMEDIATELY update `progress.md` and `activeContext.md` to reflect completion.**
-6.  **Handle Complexity:** Use `analyze-complexity`, `complexity-report`, `expand`. Update Memory Bank.
-7.  **Handle Drift:** Use `task-master update --from=<id> --prompt="..."`. Update Memory Bank (context, patterns, tech).
-8.  **Repeat:** Continue finding and completing tasks, always syncing with the Memory Bank.
+The `task-master` CLI modifies the state in `tasks/tasks.json` (e.g., task status). However, it **does not automatically update the AI's contextual knowledge** stored in the Memory Bank (`memory-bank/activeContext.md`, `memory-bank/progress.md`).
 
-Refer to `.cursor/rules/dev_workflow.mdc` for full details on the workflow and commands.
+**Therefore, after executing `task-master` commands that change the project state (like `set-status`, `update`, `add-task`, `expand`), it is ESSENTIAL to manually, or by explicitly instructing the AI, update the relevant Memory Bank files IMMEDIATELY.** Failure to do this will lead to the AI working with outdated information, causing confusion and errors in subsequent steps. Think of it as manually syncing the AI's "diary" with the actual task list changes.
 
-## Key Task Master Commands
+## Recommended Development Workflow
 
-Use `task-master <command>` (if installed globally) or `node scripts/dev.js <command>`.
+The AI assistant should facilitate this workflow, guided by `.cursor/rules/dev_workflow.mdc`:
 
--   `init`: Initialize core Task Master files (Step 1 of Setup).
--   `parse-prd <file>`: Generate `tasks.json` from PRD.
--   `list`: Show tasks.
--   `next`: Find the next task to work on.
--   `show <id>`: Show task details.
--   `generate`: Create/update individual `tasks/*.txt` files from `tasks.json`.
--   `set-status --id=<id> --status=<status>`: Update task status (**Requires Memory Bank update**).
--   `expand --id=<id> | --all [...]`: Add subtasks.
--   `update --from=<id> --prompt="..."`: Modify future tasks (**Requires Memory Bank update**).
--   `analyze-complexity [...]`: Generate complexity report.
--   `complexity-report`: View complexity report.
--   `add-dependency`, `remove-dependency`, `validate-dependencies`, `fix-dependencies`: Manage task links.
--   `add-task --prompt="..."`: Add a new task via AI (**Requires Memory Bank update**).
+1.  **Initialization:** Use `task-master parse-prd <prd_file>` and `task-master generate`. **Sync Memory Bank.**
+2.  **Task Selection:** Use `task-master list` and `task-master next`. Update `activeContext.md`.
+3.  **Task Understanding:** Use `task-master show <id>`. Consult Memory Bank/Rules.
+4.  **Implementation:** Code the task, adhering to rules and context.
+5.  **Task Completion:** Use `task-master set-status --id=<id> --status=done`. **Sync Memory Bank immediately.**
+6.  **Handling Complexity:** Use `analyze-complexity`, `complexity-report`, `expand`. **Sync Memory Bank.**
+7.  **Adapting to Changes ("Drift"):** Use `task-master update --from=<id> --prompt="..."`. **Sync Memory Bank (context, patterns, tech).**
+8.  **Iteration:** Repeat steps 2-7, consistently maintaining Memory Bank synchronization.
 
-**See `.cursor/rules/dev_workflow.mdc` for the complete command reference and options.**
+## Key Task Master Commands Overview
 
-## Integrating with Cursor AI
+Execute via `task-master <command>` (global) or `node scripts/dev.js <command>` (local).
+*(See `.cursor/rules/dev_workflow.mdc` for full command details and options)*
 
-1.  **Complete BOTH setup steps** described above accurately.
-2.  Instruct the AI to **strictly follow** the operational guidelines in `.cursor/rules/_meta_instructions.mdc`.
-3.  The AI must use the `task-master` commands for all task operations.
-4.  The AI **must be explicitly instructed or reminded** to update the Memory Bank files (`activeContext.md`, `progress.md`, etc.) immediately after relevant `task-master` commands are executed or significant project changes occur. Emphasize that this synchronization is crucial and not automatic.
+-   `init`: Setup core Task Master files (Setup Step 1).
+-   `parse-prd <file>`: Create `tasks.json` from Product Requirements Document.
+-   `list`: Display tasks from `tasks.json`.
+-   `next`: Identify the next ready task based on status and dependencies.
+-   `show <id>`: Get details for a specific task or subtask.
+-   `generate`: Create/update individual `tasks/*.txt` files (run after `tasks.json` changes).
+-   `set-status --id=<id> --status=<status>`: Modify task status (**Requires Memory Bank Sync**).
+-   `expand --id=<id> | --all [...]`: Break down tasks into subtasks (**Requires Memory Bank Sync** if scope changes).
+-   `update --from=<id> --prompt="..."`: Revise future tasks based on prompt (**Requires Memory Bank Sync**).
+-   `analyze-complexity [...]`: Assess task complexity and recommend subtasks.
+-   `complexity-report`: Display the analysis report readably.
+-   `add-dependency`, `remove-dependency`: Manage task links.
+-   `validate-dependencies`, `fix-dependencies`: Check and repair dependency links.
+-   `add-task --prompt="..."`: Use AI to add a new task (**Requires Memory Bank Sync**).
+
+## Using with Cursor AI
+
+1.  **Ensure BOTH setup steps are fully completed.**
+2.  Direct the AI to **strictly adhere** to the procedures in `.cursor/rules/_meta_instructions.mdc`.
+3.  Insist that the AI uses the documented `task-master` commands for all task manipulations.
+4.  **Explicitly instruct and verify** that the AI updates the Memory Bank files (esp. `activeContext.md`, `progress.md`) immediately following actions that change project state. Reinforce that this synchronization is mandatory for accurate context.
 
 ## Troubleshooting
 
-(Include relevant troubleshooting tips from the original README if needed, e.g., issues with global commands).
+(Add relevant troubleshooting tips here if needed, e.g., regarding global command path issues or specific errors).
