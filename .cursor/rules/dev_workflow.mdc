@@ -1,0 +1,102 @@
+---
+description: Defines the Task Master CLI (`task-master` or `node scripts/dev.js`) workflow, commands, and integration with the Memory Bank system. CRITICAL FOR PROJECT OPERATION.
+globs: **/*
+alwaysApply: true
+---
+
+# Task Master Workflow & Command Reference
+
+**This document describes the primary tool (`task-master` CLI) for managing development tasks in this project. Accurate usage and state synchronization with the Memory Bank (`memory-bank/*`) is essential.**
+
+**Refer to:** `[_meta_instructions.mdc](mdc:.cursor/rules/_meta_instructions.mdc)` for the overall system reading order and update protocols.
+
+## Core Concept:
+
+- Tasks are defined in `[tasks/tasks.json](mdc:tasks/tasks.json)`.
+- The `task-master` CLI (run via global command or `node [scripts/dev.js](mdc:scripts/dev.js)`) manipulates this file and generates individual task files in `tasks/`.
+- **AI actions involving tasks MUST use these commands.**
+- **Task state changes MUST be reflected in `[memory-bank/progress.md](mdc:memory-bank/progress.md)` and `[memory-bank/activeContext.md](mdc:memory-bank/activeContext.md)`.**
+
+## Configuration:
+
+- Uses `.env` file at the project root.
+- **Required:** `ANTHROPIC_API_KEY`
+- **Optional:** `MODEL`, `MAX_TOKENS`, `TEMPERATURE`, `PERPLEXITY_API_KEY`, `PERPLEXITY_MODEL`, `DEBUG`, `LOG_LEVEL`, `DEFAULT_SUBTASKS`, `DEFAULT_PRIORITY`, `PROJECT_NAME`, `PROJECT_VERSION`. (See `[README.md](mdc:README.md)` for details).
+
+## Standard Workflow & AI Responsibilities:
+
+1.  **Initialization (Project Start):**
+    *   User might run `task-master init` or ask AI.
+    *   User provides PRD (e.g., `[scripts/example_prd.txt](mdc:scripts/example_prd.txt)`).
+    *   **AI Action:** Run `task-master parse-prd <path_to_prd>` (e.g., `task-master parse-prd scripts/example_prd.txt`).
+    *   **AI Action:** Run `task-master generate` to create individual task files.
+    *   **AI Action:** Update `[memory-bank/progress.md](mdc:memory-bank/progress.md)` (Initial tasks loaded) and `[memory-bank/activeContext.md](mdc:memory-bank/activeContext.md)` (Ready to start first task).
+
+2.  **Determine Next Task:**
+    *   User asks "What's next?" or AI needs to select a task.
+    *   **AI Action:** Run `task-master list [--status=pending]` for overview.
+    *   **AI Action:** Run `task-master next` to get the highest priority, dependency-free task.
+    *   **AI Action:** Consult `[memory-bank/progress.md](mdc:memory-bank/progress.md)` to cross-reference dependencies if needed.
+    *   **AI Action:** Present the next task to the user, potentially using `task-master show <id>` for details. Update `[activeContext.md](mdc:memory-bank/activeContext.md)` with the selected task.
+
+3.  **Implement Task:**
+    *   AI assists user based on task details (from `task-master show <id>` or `tasks/task_xyz.txt`).
+    *   Code is written, tests are performed based on `testStrategy`.
+
+4.  **Complete Task:**
+    *   User confirms task completion.
+    *   **AI Action:** Run `task-master set-status --id=<id> --status=done`.
+    *   **AI Action:** Update `[memory-bank/progress.md](mdc:memory-bank/progress.md)` (Task completed).
+    *   **AI Action:** Update `[memory-bank/activeContext.md](mdc:memory-bank/activeContext.md)` (Task done, ready for next).
+
+5.  **Handle Complexity (Planning/Execution):**
+    *   Task seems too large.
+    *   **AI Action (Optional but Recommended):** Run `task-master analyze-complexity [--research]`. Review with `task-master complexity-report`.
+    *   **AI Action:** Run `task-master expand --id=<id> [--num=<n>] [--prompt="context"] [--research]` based on analysis or user request.
+    *   **AI Action:** Update `[memory-bank/activeContext.md](mdc:memory-bank/activeContext.md)` (Task expanded, list subtasks).
+    *   Subtasks are then worked through using `set-status` for `parent.subtask` IDs.
+
+6.  **Handle Implementation Drift:**
+    *   Approach changes, impacting future tasks.
+    *   **AI Action:** Run `task-master update --from=<future_task_id> --prompt="<explanation>"`.
+    *   **AI Action:** Update `[memory-bank/activeContext.md](mdc:memory-bank/activeContext.md)` (Note the drift and update rationale).
+    *   **AI Action:** Update `[memory-bank/systemPatterns.md](mdc:memory-bank/systemPatterns.md)` or `[memory-bank/techContext.md](mdc:memory-bank/techContext.md)` if the drift represents a significant architectural or tech stack change.
+
+7.  **Manage Dependencies:**
+    *   Need to add/remove dependencies manually.
+    *   **AI Action:** Run `task-master add-dependency --id=<id> --depends-on=<id>`.
+    *   **AI Action:** Run `task-master remove-dependency --id=<id> --depends-on=<id>`.
+    *   **AI Action:** Periodically run `task-master validate-dependencies` to check health. Use `task-master fix-dependencies` if needed.
+    *   **AI Action:** Update relevant task details in Memory Bank if changes are significant.
+
+8.  **Add New Tasks Manually:**
+    *   Need to inject a new task mid-project.
+    *   **AI Action:** Run `task-master add-task --prompt="<description>" [--dependencies=<ids>] [--priority=<level>]`.
+    *   **AI Action:** Update `[memory-bank/progress.md](mdc:memory-bank/progress.md)` and `[memory-bank/activeContext.md](mdc:memory-bank/activeContext.md)`.
+
+## Command Reference Summary:
+
+*(Maps closely to `scripts/README.md` sections)*
+
+-   **`init`**: Setup new project structure (less likely AI use).
+-   **`parse-prd [prd-file] [--num-tasks=N]`**: Generate `tasks.json` from PRD.
+-   **`list [--status=S] [--with-subtasks]`**: Show tasks.
+-   **`next`**: Determine the next actionable task.
+-   **`show <id or id.subid>`**: Display detailed task info.
+-   **`generate`**: Create/update individual `tasks/*.txt` files from `tasks.json`. **Run after significant `tasks.json` changes.**
+-   **`set-status --id=<id,...> --status=S`**: Update task/subtask status. **Triggers Memory Bank update.**
+-   **`update --from=<id> --prompt="P"`**: Refactor future tasks based on prompt. **Triggers Memory Bank update.**
+-   **`expand --id=<id>|--all [--num=N] [--prompt="P"] [--research] [--force]`**: Add subtasks. Uses complexity report if available. **Triggers Memory Bank update.**
+-   **`clear-subtasks --id=<id,...>|--all`**: Remove subtasks.
+-   **`analyze-complexity [options] [--research]`**: Assess task complexity, saves report (default: `scripts/task-complexity-report.json`).
+-   **`complexity-report [--file=F]`**: Display formatted complexity report.
+-   **`add-dependency --id=X --depends-on=Y`**: Link tasks.
+-   **`remove-dependency --id=X --depends-on=Y`**: Unlink tasks.
+-   **`validate-dependencies`**: Check for bad links.
+-   **`fix-dependencies`**: Automatically remove bad links.
+-   **`add-task --prompt="P" [options]`**: Add a new task via AI. **Triggers Memory Bank update.**
+
+**Key Task Structure Fields (in `tasks.json` and `show` output):**
+`id`, `title`, `description`, `status`, `dependencies` (with ✅/⏱️ indicators), `priority`, `details`, `testStrategy`, `subtasks`.
+
+**Remember the feedback loop: `task-master` commands modify `tasks.json`, AI actions MUST use commands, and resulting state changes MUST be documented in the Memory Bank.** 

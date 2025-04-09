@@ -1,0 +1,53 @@
+---
+description: Core instructions defining the combined Memory Bank and Rules system for AI operation. MUST READ FIRST.
+globs: **/*
+alwaysApply: true
+---
+
+# AI Operating Instructions: Combined Memory Bank & Rules System
+
+**CRITICAL: Your memory resets between sessions. This system provides the necessary context and rules for continuity.**
+
+## Initialization Protocol (Start of Every Session/Task):
+
+1.  **Layer 1: Read Foundational Context (Mandatory):**
+    *   Thoroughly read *all* files within the `memory-bank/` directory in the following order:
+        1.  `[projectbrief.md](mdc:memory-bank/projectbrief.md)`: Core goals and scope.
+        2.  `[productContext.md](mdc:memory-bank/productContext.md)`: The "Why" - problem, users, value.
+        3.  `[systemPatterns.md](mdc:memory-bank/systemPatterns.md)`: Architecture, high-level technical decisions, patterns.
+        4.  `[techContext.md](mdc:memory-bank/techContext.md)`: Tech stack, setup, constraints.
+        5.  `[activeContext.md](mdc:memory-bank/activeContext.md)`: *Current* focus, recent changes, immediate next steps, decisions. **Pay close attention here.**
+        6.  `[progress.md](mdc:memory-bank/progress.md)`: Overall status, what's done, what's left, known issues. **Pay close attention here.**
+    *   This layer provides the essential project understanding and current state.
+
+2.  **Layer 3: Read Dynamic Learning (Mandatory):**
+    *   Read `[.cursor/learned_preferences.md](mdc:.cursor/learned_preferences.md)`.
+    *   This contains specific user preferences, project nuances, or patterns learned during previous interactions that aren't static rules.
+
+3.  **Layer 2: Consult Actionable Rules & Workflows (As Needed):**
+    *   The `.cursor/rules/` directory contains specific rules and workflow definitions.
+    *   **Always Load:** `[dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc)` is critical as it defines the Task Master CLI usage and its integration points. Read this thoroughly.
+    *   **Selective Loading:** For other `.mdc` files in this directory (e.g., coding standards), consult them *if* their `globs:` pattern matches the file(s) you are currently working on *unless* they have `alwaysApply: true`.
+    *   Use `[cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc)` as a guide for rule format and `[self_improve.mdc](mdc:.cursor/rules/self_improve.mdc)` for the process of updating these rules.
+
+## Core Workflows Integration:
+
+*   **Task Management:** Use the `task-master` CLI as documented in `[dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc)`.
+    *   Commands like `list`, `next`, `show` help understand the current tasks based on `tasks/tasks.json`.
+    *   The state reflected in `task-master` output should align with `[progress.md](mdc:memory-bank/progress.md)` and `[activeContext.md](mdc:memory-bank/activeContext.md)`.
+*   **State Synchronization (IMPORTANT):**
+    *   When a task status changes via `task-master set-status`, **you MUST update** `[progress.md](mdc:memory-bank/progress.md)` and `[activeContext.md](mdc:memory-bank/activeContext.md)` to reflect this change (e.g., task done, next task identified).
+    *   When `task-master update` or `expand` modifies future tasks, update `[activeContext.md](mdc:memory-bank/activeContext.md)` to note the change rationale and potentially `[progress.md](mdc:memory-bank/progress.md)` if it affects overall scope/status.
+*   **Planning Mode (`/plan`):**
+    *   Follow the process defined in the base prompt: Read Memory Bank -> Ask Clarifying Questions -> Propose Plan -> Get Approval -> Execute -> Report Progress Step-by-Step.
+    *   Use `task-master analyze-complexity` and `task-master expand` as part of planning for complex tasks. Update Memory Bank after planning.
+*   **Acting Mode:**
+    *   Follow the process: Check Memory Bank -> Update Memory Bank (if needed based on new info/changes) -> Update `learned_preferences.md` (if needed) -> Execute Task (using `task-master` and coding) -> Document Changes (Code comments AND Memory Bank updates).
+
+## Documentation Updates:
+
+*   **Memory Bank:** Update Layer 1 files (esp. `activeContext.md`, `progress.md`) *whenever* significant changes occur, new decisions are made, or tasks are completed. Use the user trigger "**update memory bank**" for a full review/refresh.
+*   **Rules:** Update Layer 2 `.mdc` files according to `[self_improve.mdc](mdc:.cursor/rules/self_improve.mdc)`.
+*   **Learned Preferences:** Add insights to Layer 3 (`[.cursor/learned_preferences.md](mdc:.cursor/learned_preferences.md)`) when discovering user preferences or project-specific patterns not suitable for static rules.
+
+**Your effectiveness depends entirely on accurately reading and maintaining this layered system.** 

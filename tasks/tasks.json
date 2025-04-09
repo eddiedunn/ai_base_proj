@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "tasks": [
+    {
+      "id": "T001",
+      "title": "Implement Basic CLI Structure",
+      "description": "Create the core CLI interface with basic command handling",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "high",
+      "details": {
+        "implementation": "Use Commander.js for CLI interface",
+        "testStrategy": "Unit tests for each command"
+      },
+      "subtasks": []
+    },
+    {
+      "id": "T002",
+      "title": "Implement Task Storage",
+      "description": "Create the task storage system using JSON files",
+      "status": "pending",
+      "dependencies": ["T001"],
+      "priority": "high",
+      "details": {
+        "implementation": "JSON file storage with validation",
+        "testStrategy": "Unit tests for storage operations"
+      },
+      "subtasks": []
+    },
+    {
+      "id": "T003",
+      "title": "Implement AI Integration",
+      "description": "Integrate Anthropic API for task analysis",
+      "status": "pending",
+      "dependencies": ["T001"],
+      "priority": "medium",
+      "details": {
+        "implementation": "Use @anthropic-ai/sdk",
+        "testStrategy": "Mock API responses"
+      },
+      "subtasks": []
+    }
+  ]
+} 

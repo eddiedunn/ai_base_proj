@@ -1,0 +1,51 @@
+# Task Master Product Requirements Document
+
+## Overview
+Task Master is an AI-powered task management system that helps developers and project managers break down complex requirements into manageable tasks while maintaining context across development sessions.
+
+## Core Features
+
+### 1. Task Management
+- Parse PRDs into structured tasks
+- Manage task dependencies
+- Track task status and progress
+- Generate subtasks for complex tasks
+
+### 2. AI Integration
+- Analyze task complexity
+- Suggest task breakdowns
+- Provide implementation guidance
+- Maintain context awareness
+
+### 3. Memory Bank System
+- Store project context
+- Track decisions and rationale
+- Maintain development history
+- Support dynamic learning
+
+### 4. CLI Interface
+- Intuitive command structure
+- Comprehensive task operations
+- Clear status reporting
+- Flexible configuration
+
+## Technical Requirements
+
+### Backend
+- Node.js v18.0.0+
+- Anthropic API integration
+- Optional Perplexity API integration
+- JSON-based task storage
+
+### Development
+- Comprehensive test suite
+- Clear documentation
+- Modular architecture
+- Extensible design
+
+## Success Criteria
+1. Successfully parse PRDs into actionable tasks
+2. Maintain accurate task dependencies
+3. Provide useful AI-powered insights
+4. Keep context across development sessions
+5. Deliver intuitive CLI experience 

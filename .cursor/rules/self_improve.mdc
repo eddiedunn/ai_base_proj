@@ -1,0 +1,51 @@
+---
+description: Guidelines for continuously improving rules in `.cursor/rules/` based on project evolution.
+globs: .cursor/rules/*.mdc
+alwaysApply: true
+---
+
+- **Refer to:** `[_meta_instructions.mdc](mdc:.cursor/rules/_meta_instructions.mdc)` for the overall system structure.
+
+- **Rule Improvement Triggers:**
+  - New coding patterns emerge that need standardization.
+  - Existing rules become outdated due to refactoring or tech changes.
+  - The `task-master` CLI (`[dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc)`) functionality changes.
+  - Repeated questions or errors indicate a gap in documentation/rules.
+  - Insights from `[.cursor/learned_preferences.md](mdc:.cursor/learned_preferences.md)` suggest a pattern is stable enough to become a static rule.
+  - Memory Bank (`memory-bank/*`) updates reveal changes needing reflection in rules.
+
+- **Analysis Process:**
+  - Compare new code/workflows against existing rules.
+  - Identify patterns needing standardization (is it a rule or a learned preference?).
+  - Check if `[dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc)` accurately reflects current `task-master` usage.
+
+- **Rule Updates:**
+  - **Add New Rules When:**
+    - A new standard/pattern is consistently used (e.g., in 3+ places).
+    - A common mistake could be prevented by an explicit rule.
+    - A new tool or core library section needs specific guidance.
+  - **Modify Existing Rules When:**
+    - Better examples exist in the codebase.
+    - The documented workflow (e.g., in `dev_workflow.mdc`) changes.
+    - Related rules or Memory Bank files are updated.
+    - `alwaysApply` status needs reconsideration.
+  - **Consider Moving from `learned_preferences.md` When:**
+    - A preference becomes a consistently enforced standard.
+
+- **Rule Quality Checks:**
+  - Rules must be actionable or clearly informative.
+  - Examples should ideally come from *this* project (`shit_test`).
+  - References (`mdc:` links) must be valid and up-to-date.
+  - Ensure consistency with Memory Bank (`memory-bank/*`) context.
+
+- **Continuous Improvement:**
+  - Monitor AI interactions and user feedback for areas of confusion.
+  - Update rules after major refactors or dependency changes.
+  - Sync `dev_workflow.mdc` with `scripts/README.md` and actual script behavior.
+
+- **Rule Deprecation:**
+  - Mark outdated patterns clearly within the rule (e.g., **DEPRECATED:**).
+  - Remove rules that no longer apply after confirming with the user.
+  - Update references pointing to deprecated rules.
+
+- **Follow Rule Formatting:** Adhere to guidelines in `[cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc)`. 

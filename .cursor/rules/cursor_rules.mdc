@@ -1,0 +1,55 @@
+---
+description: Guidelines for creating and maintaining Cursor rules within this project's `.cursor/rules/` directory to ensure consistency and effectiveness.
+globs: .cursor/rules/*.mdc
+alwaysApply: true
+---
+
+- **Refer to:** `[_meta_instructions.mdc](mdc:.cursor/rules/_meta_instructions.mdc)` for the overall system structure.
+
+- **Required Rule Structure:**
+  ```markdown
+  ---
+  description: Clear, one-line description of what the rule enforces/documents.
+  globs: path/to/files/*.ext, other/path/**/* # Use **/* for global rules.
+  alwaysApply: boolean # True = always load, False = load only if glob matches.
+  ---
+
+  - **Main Points in Bold**
+    - Sub-points with details
+    - Examples and explanations
+  ```
+
+- **File References:**
+  - Use `[filename](mdc:path/to/file)` format.
+  - Example (Rule): `[dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc)`
+  - Example (Code): `[scripts/dev.js](mdc:scripts/dev.js)`
+  - Example (Memory Bank): `[activeContext.md](mdc:memory-bank/activeContext.md)`
+
+- **Code Examples:**
+  - Use language-specific code blocks.
+  ```javascript
+  // ✅ DO: Show good examples relevant to this project.
+  const goodExample = true;
+
+  // ❌ DON'T: Show anti-patterns to avoid.
+  const badExample = false;
+  ```
+
+- **Rule Content Guidelines:**
+  - Start with a high-level overview if complex.
+  - Include specific, actionable requirements or information.
+  - Show examples of correct implementation *from this project* if possible.
+  - Keep rules DRY; reference other rules (`[rule_name.mdc](mdc:.cursor/rules/rule_name.mdc)`) or Memory Bank files instead of duplicating content.
+  - Clearly state if a rule is prescriptive (a standard to follow) or descriptive (documenting a process/tool).
+
+- **Rule Maintenance:**
+  - Follow the process outlined in `[self_improve.mdc](mdc:.cursor/rules/self_improve.mdc)`.
+  - Update rules when project patterns, tools, or workflows change.
+  - Ensure examples remain accurate.
+
+- **Best Practices:**
+  - Use bullet points for readability.
+  - Keep descriptions concise.
+  - Include DO/DON'T examples where applicable.
+  - Prioritize references to actual project code/files.
+  - Maintain consistent formatting. 

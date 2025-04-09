@@ -1,0 +1,25 @@
+{
+  "name": "task-master",
+  "version": "1.0.0",
+  "description": "AI-powered task management system with Memory Bank integration",
+  "main": "scripts/dev.js",
+  "bin": {
+    "task-master": "./scripts/dev.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node scripts/dev.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.8.0",
+    "commander": "^11.1.0",
+    "dotenv": "^16.4.1",
+    "openai": "^4.28.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
